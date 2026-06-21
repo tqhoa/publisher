@@ -23,16 +23,12 @@ def test_decrypt_fails_on_tampered_data():
         decrypt(tampered)
 
 
-def test_invalid_key_length_raises(monkeypatch):
-    monkeypatch.setenv("COOKIE_ENCRYPTION_KEY", base64.b64encode(b"short").decode())
-    # Re-import settings with patched env
-    import importlib
-    import shared.config as cfg_module
-    importlib.reload(cfg_module)
+def test_invalid_key_length_raises():
+    from unittest.mock import patch, MagicMock
     import infrastructure.encryption.cookie_cipher as cipher_module
-    importlib.reload(cipher_module)
-    with pytest.raises(ValueError, match="32 bytes"):
-        cipher_module.encrypt("data")
-    # Reload again to restore
-    importlib.reload(cfg_module)
-    importlib.reload(cipher_module)
+    short_key = base64.b64encode(b"short").decode()
+    mock_settings = MagicMock()
+    mock_settings.cookie_encryption_key = short_key
+    with patch.object(cipher_module, "settings", mock_settings):
+        with pytest.raises(ValueError, match="32 bytes"):
+            cipher_module.encrypt("data")

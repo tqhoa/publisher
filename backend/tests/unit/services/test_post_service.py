@@ -1,4 +1,5 @@
 import pytest
+from datetime import datetime, timezone
 from unittest.mock import AsyncMock, MagicMock, patch
 
 from domain.services.post_service import PostService
@@ -20,7 +21,7 @@ def _mock_post(**kwargs) -> MagicMock:
     post.published_at = kwargs.get("published_at", None)
     post.error_message = kwargs.get("error_message", None)
     post.retry_count = kwargs.get("retry_count", 0)
-    post.created_at = kwargs.get("created_at", None)
+    post.created_at = kwargs.get("created_at", datetime.now(timezone.utc))
     return post
 
 

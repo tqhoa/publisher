@@ -13,7 +13,11 @@ def homepage(request: Request) -> JSONResponse:
     return JSONResponse({"status": "ok"})
 
 
-app = Starlette(routes=[Route("/", homepage)])
+def docs_page(request: Request) -> JSONResponse:
+    return JSONResponse({"page": "docs"})
+
+
+app = Starlette(routes=[Route("/", homepage), Route("/docs", docs_page)])
 app.add_middleware(SecurityHeadersMiddleware)
 client = TestClient(app)
 
@@ -42,6 +46,11 @@ def test_csp_header_present():
     response = client.get("/")
     csp = response.headers.get("content-security-policy", "")
     assert "default-src" in csp
+
+
+def test_csp_absent_on_docs_path():
+    response = client.get("/docs")
+    assert "content-security-policy" not in response.headers
 
 
 def test_permissions_policy_header():
