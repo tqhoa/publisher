@@ -1,0 +1,68 @@
+{
+  "title": "Publisher — Publish Jobs",
+  "uid": "publish-jobs",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Publish Success Rate (%)",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 4 },
+      "targets": [
+        {
+          "expr": "rate(publish_tasks_success_total[5m]) / (rate(publish_tasks_success_total[5m]) + rate(publish_tasks_failed_total[5m])) * 100",
+          "legendFormat": "Success %"
+        }
+      ],
+      "thresholds": {
+        "steps": [
+          { "color": "red", "value": 0 },
+          { "color": "yellow", "value": 85 },
+          { "color": "green", "value": 95 }
+        ]
+      }
+    },
+    {
+      "id": 2,
+      "title": "Queue Depth",
+      "type": "timeseries",
+      "gridPos": { "x": 6, "y": 0, "w": 18, "h": 8 },
+      "targets": [
+        {
+          "expr": "celery_queue_length{queue=\"default\"}",
+          "legendFormat": "Queue depth"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Publish Task Rate",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "rate(publish_tasks_success_total[5m])",
+          "legendFormat": "Success/s"
+        },
+        {
+          "expr": "rate(publish_tasks_failed_total[5m])",
+          "legendFormat": "Failed/s"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Retry Rate",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 8, "w": 12, "h": 8 },
+      "targets": [
+        {
+          "expr": "rate(publish_tasks_retried_total[5m])",
+          "legendFormat": "Retries/s"
+        }
+      ]
+    }
+  ]
+}

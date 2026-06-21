@@ -1,0 +1,51 @@
+groups:
+  - name: publisher-alerts
+    rules:
+      - alert: ServiceDown
+        expr: up{job="publisher-api"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Publisher API is down"
+
+      - alert: HighErrorRate
+        expr: |
+          rate(http_requests_total{job="publisher-api",status_code=~"5.."}[5m])
+          / rate(http_requests_total{job="publisher-api"}[5m]) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Error rate > 5% on publisher-api"
+
+      - alert: HighLatency
+        expr: |
+          histogram_quantile(0.99,
+            rate(http_request_duration_seconds_bucket{job="publisher-api"}[5m])
+          ) > 1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "P99 latency > 1s on publisher-api"
+
+      - alert: BrowserCrashRate
+        expr: |
+          rate(browser_sessions_crashed[5m])
+          / (rate(browser_sessions_idle[5m]) + rate(browser_sessions_busy[5m]) + rate(browser_sessions_crashed[5m]) + 0.001) > 0.02
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Browser crash rate > 2%"
+
+      - alert: PublishSuccessRateLow
+        expr: |
+          rate(publish_tasks_success_total[5m])
+          / (rate(publish_tasks_success_total[5m]) + rate(publish_tasks_failed_total[5m]) + 0.001) < 0.95
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Publish success rate < 95%"

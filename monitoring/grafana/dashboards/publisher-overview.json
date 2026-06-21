@@ -1,0 +1,53 @@
+{
+  "title": "Publisher — Overview",
+  "uid": "publisher-overview",
+  "schemaVersion": 36,
+  "version": 1,
+  "refresh": "30s",
+  "panels": [
+    {
+      "id": 1,
+      "title": "Request Rate (req/s)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 8, "h": 8 },
+      "targets": [
+        {
+          "expr": "rate(http_requests_total{job=\"publisher-api\"}[5m])",
+          "legendFormat": "{{method}} {{route}}"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Error Rate (%)",
+      "type": "timeseries",
+      "gridPos": { "x": 8, "y": 0, "w": 8, "h": 8 },
+      "targets": [
+        {
+          "expr": "rate(http_requests_total{job=\"publisher-api\",status_code=~\"5..\"}[5m]) / rate(http_requests_total{job=\"publisher-api\"}[5m]) * 100",
+          "legendFormat": "Error %"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "P99 Latency (ms)",
+      "type": "timeseries",
+      "gridPos": { "x": 16, "y": 0, "w": 8, "h": 8 },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, rate(http_request_duration_seconds_bucket{job=\"publisher-api\"}[5m])) * 1000",
+          "legendFormat": "P99"
+        },
+        {
+          "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"publisher-api\"}[5m])) * 1000",
+          "legendFormat": "P95"
+        },
+        {
+          "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{job=\"publisher-api\"}[5m])) * 1000",
+          "legendFormat": "P50"
+        }
+      ]
+    }
+  ]
+}

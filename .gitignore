@@ -1,0 +1,28 @@
+# Secrets
+backend/.env
+*.env.local
+.claude
+.rtk
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+dist/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+frontend/dist/
+
+# Docker
+postgres_data/
+redis_data/
+
+# Editor
+.vscode/
+.idea/
+*.swp

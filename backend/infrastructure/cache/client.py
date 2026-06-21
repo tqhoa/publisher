@@ -1,0 +1,4 @@
+from redis.asyncio import Redis
+from shared.config import settings
+
+redis: Redis = Redis.from_url(settings.redis_url, decode_responses=True)  # type: ignore[type-arg]

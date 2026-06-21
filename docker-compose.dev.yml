@@ -1,0 +1,19 @@
+services:
+  api:
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    volumes:
+      - ./backend:/app
+    environment:
+      - ENVIRONMENT=development
+
+  worker:
+    volumes:
+      - ./backend:/app
+
+  beat:
+    volumes:
+      - ./backend:/app
+
+  # In dev, skip frontend build — use `npm run dev` locally on port 5173
+  frontend:
+    profiles: ["prod"]
