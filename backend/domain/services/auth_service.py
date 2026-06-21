@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from domain.repositories.user_repository import UserRepository
 from infrastructure.database.models.user import UserModel
-from schemas.auth import LoginRequest, LoginResponse, TokenRefreshResponse
+from schemas.auth import LoginRequest, LoginResponse, TokenRefreshResponse, UserInfo
 from shared.exceptions import AppError
 from shared.helpers.hash import verify_password
 from shared.helpers.jwt import create_access_token, create_refresh_token, decode_token
@@ -20,7 +20,7 @@ class AuthService:
         return LoginResponse(
             access_token=create_access_token(user.id, user.role),
             refresh_token=create_refresh_token(user.id),
-            role=user.role,
+            user=UserInfo(id=user.id, email=user.email, role=user.role),
         )
 
     async def refresh(self, refresh_token: str) -> TokenRefreshResponse:

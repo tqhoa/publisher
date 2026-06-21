@@ -12,7 +12,7 @@ from shared.helpers.jwt import create_access_token
 @pytest.fixture
 async def admin_user(db_session: AsyncSession) -> UserModel:
     user = UserModel(
-        email="postsadmin@publisher.local",
+        email="postsadmin@publisher.info",
         password_hash=hash_password("TestPass123!"),
         role="admin",
     )
@@ -50,6 +50,7 @@ def _post_payload(account_id: str, **overrides: object) -> dict:
 
 
 # ──────────────────────────── Create ────────────────────────────
+
 
 @pytest.mark.asyncio
 async def test_create_post_returns_201_status_queued(
@@ -91,8 +92,11 @@ async def test_create_post_no_auth_returns_401(
 
 # ──────────────────────────── List ────────────────────────────
 
+
 @pytest.mark.asyncio
-async def test_list_posts_returns_200(client: AsyncClient, auth_headers: dict, account: AccountModel):
+async def test_list_posts_returns_200(
+    client: AsyncClient, auth_headers: dict, account: AccountModel
+):
     with patch("domain.services.post_service.PostService._enqueue"):
         await client.post(
             "/api/v1/posts",
@@ -123,8 +127,11 @@ async def test_list_posts_filter_by_status(
 
 # ──────────────────────────── Get ────────────────────────────
 
+
 @pytest.mark.asyncio
-async def test_get_post_returns_200(client: AsyncClient, auth_headers: dict, account: AccountModel):
+async def test_get_post_returns_200(
+    client: AsyncClient, auth_headers: dict, account: AccountModel
+):
     with patch("domain.services.post_service.PostService._enqueue"):
         create = await client.post(
             "/api/v1/posts",
@@ -138,13 +145,16 @@ async def test_get_post_returns_200(client: AsyncClient, auth_headers: dict, acc
 
 
 @pytest.mark.asyncio
-async def test_get_nonexistent_post_returns_404(client: AsyncClient, auth_headers: dict):
+async def test_get_nonexistent_post_returns_404(
+    client: AsyncClient, auth_headers: dict
+):
     response = await client.get("/api/v1/posts/nonexistent", headers=auth_headers)
     assert response.status_code == 404
     assert response.json()["error"]["code"] == "POST_NOT_FOUND"
 
 
 # ──────────────────────────── Publish-now ────────────────────────────
+
 
 @pytest.mark.asyncio
 async def test_publish_now_queues_pending_post(
@@ -159,6 +169,8 @@ async def test_publish_now_queues_pending_post(
         post_id = create.json()["data"]["id"]
         assert create.json()["data"]["status"] == "pending"
 
-        response = await client.post(f"/api/v1/posts/{post_id}/publish-now", headers=auth_headers)
+        response = await client.post(
+            f"/api/v1/posts/{post_id}/publish-now", headers=auth_headers
+        )
     assert response.status_code == 200
     assert response.json()["data"]["status"] == "queued"

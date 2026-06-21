@@ -34,6 +34,7 @@ cp backend/.env.example backend/.env
 ```
 
 Edit `backend/.env`:
+
 - Set `JWT_SECRET` to a random 32+ char string
 - Set `COOKIE_ENCRYPTION_KEY` to a base64-encoded 32-byte key:
   ```bash
@@ -76,18 +77,18 @@ Open http://localhost:5173 and sign in with the credentials from `SEED_ADMIN_EMA
 
 ## Environment Variables
 
-| Variable | Required | Default | Description |
-|----------|----------|---------|-------------|
-| `DATABASE_URL` | ✅ | — | PostgreSQL async URL |
-| `REDIS_URL` | ✅ | `redis://redis:6379/0` | Redis connection |
-| `JWT_SECRET` | ✅ | — | JWT signing key (≥32 chars) |
-| `COOKIE_ENCRYPTION_KEY` | ✅ | — | Base64 AES-256 key (32 bytes) |
-| `ALLOWED_ORIGINS` | — | `http://localhost:5173` | CORS allowed origins (comma-separated) |
-| `ENVIRONMENT` | — | `development` | `development` or `production` |
-| `BROWSER_MAX_SESSIONS` | — | `100` | Max concurrent Playwright sessions |
-| `BROWSER_HEADLESS` | — | `true` | Run browsers headless |
-| `SEED_ADMIN_EMAIL` | — | `admin@publisher.local` | First admin email |
-| `SEED_ADMIN_PASSWORD` | — | `Admin123!` | First admin password |
+| Variable                | Required | Default                 | Description                            |
+| ----------------------- | -------- | ----------------------- | -------------------------------------- |
+| `DATABASE_URL`          | ✅       | —                       | PostgreSQL async URL                   |
+| `REDIS_URL`             | ✅       | `redis://redis:6379/0`  | Redis connection                       |
+| `JWT_SECRET`            | ✅       | —                       | JWT signing key (≥32 chars)            |
+| `COOKIE_ENCRYPTION_KEY` | ✅       | —                       | Base64 AES-256 key (32 bytes)          |
+| `ALLOWED_ORIGINS`       | —        | `http://localhost:5173` | CORS allowed origins (comma-separated) |
+| `ENVIRONMENT`           | —        | `development`           | `development` or `production`          |
+| `BROWSER_MAX_SESSIONS`  | —        | `100`                   | Max concurrent Playwright sessions     |
+| `BROWSER_HEADLESS`      | —        | `true`                  | Run browsers headless                  |
+| `SEED_ADMIN_EMAIL`      | —        | `admin@publisher.info`  | First admin email                      |
+| `SEED_ADMIN_PASSWORD`   | —        | `Admin123!`             | First admin password                   |
 
 ---
 

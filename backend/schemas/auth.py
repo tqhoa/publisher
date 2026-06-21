@@ -6,11 +6,17 @@ class LoginRequest(BaseModel):
     password: str
 
 
+class UserInfo(BaseModel):
+    id: str
+    email: str
+    role: str
+
+
 class LoginResponse(BaseModel):
     access_token: str
     refresh_token: str
     token_type: str = "bearer"
-    role: str
+    user: UserInfo
 
 
 class TokenRefreshRequest(BaseModel):
@@ -20,9 +26,3 @@ class TokenRefreshRequest(BaseModel):
 class TokenRefreshResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
-
-
-class UserInfo(BaseModel):
-    id: str
-    email: str
-    role: str

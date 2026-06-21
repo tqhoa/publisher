@@ -2,8 +2,9 @@ import { apiClient } from '@/api'
 import type { ApiResponse, User } from '@/types'
 
 interface LoginResponse {
-  accessToken: string
-  refreshToken: string
+  access_token: string
+  refresh_token: string
+  token_type: string
   user: User
 }
 

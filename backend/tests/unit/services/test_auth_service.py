@@ -33,7 +33,9 @@ async def test_login_valid_credentials_returns_tokens(mock_db, mock_user: MagicM
 
     assert result.access_token
     assert result.refresh_token
-    assert result.role == "operator"
+    assert result.user.id == "user-123"
+    assert result.user.email == "test@test.com"
+    assert result.user.role == "operator"
 
 
 @pytest.mark.asyncio

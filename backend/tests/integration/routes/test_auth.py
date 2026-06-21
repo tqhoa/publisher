@@ -9,7 +9,7 @@ from shared.helpers.hash import hash_password
 @pytest.fixture
 async def admin_user(db_session: AsyncSession) -> UserModel:
     user = UserModel(
-        email="testadmin@publisher.local",
+        email="testadmin@publisher.info",
         password_hash=hash_password("TestPass123!"),
         role="admin",
     )
@@ -19,7 +19,9 @@ async def admin_user(db_session: AsyncSession) -> UserModel:
 
 
 @pytest.mark.asyncio
-async def test_login_valid_credentials_returns_tokens(client: AsyncClient, admin_user: UserModel):
+async def test_login_valid_credentials_returns_tokens(
+    client: AsyncClient, admin_user: UserModel
+):
     response = await client.post(
         "/api/v1/auth/login",
         json={"email": admin_user.email, "password": "TestPass123!"},
@@ -31,7 +33,9 @@ async def test_login_valid_credentials_returns_tokens(client: AsyncClient, admin
 
 
 @pytest.mark.asyncio
-async def test_login_wrong_password_returns_401(client: AsyncClient, admin_user: UserModel):
+async def test_login_wrong_password_returns_401(
+    client: AsyncClient, admin_user: UserModel
+):
     response = await client.post(
         "/api/v1/auth/login",
         json={"email": admin_user.email, "password": "wrong"},

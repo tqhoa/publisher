@@ -1,11 +1,13 @@
-import { type Ref, computed } from 'vue'
+import { type MaybeRefOrGetter, type Ref, computed, toValue } from 'vue'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/vue-query'
 import { postsApi } from '@/api/endpoints/posts.api'
 
-export function usePosts(params?: { status?: string; platform?: string; page?: number; limit?: number }) {
+type PostsParams = { status?: string; platform?: string; page?: number; limit?: number }
+
+export function usePosts(params?: MaybeRefOrGetter<PostsParams>) {
   return useQuery({
-    queryKey: computed(() => ['posts', params]),
-    queryFn: () => postsApi.list(params),
+    queryKey: computed(() => ['posts', toValue(params)]),
+    queryFn: () => postsApi.list(toValue(params)),
     staleTime: 15_000,
   })
 }

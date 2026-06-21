@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     allowed_origins: str = "http://localhost:5173"
 
     # Seed admin (first run)
-    seed_admin_email: str = "admin@publisher.local"
+    seed_admin_email: str = "admin@publisher.info"
     seed_admin_password: str = "Admin123!"
 
     # Celery
